@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JELAJAH BILANGAN BULAT - MPI Matematika Kelas VII</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts (Fredoka & Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#0284c7',
+              darkblue: '#0369a1',
+              green: '#10b981',
+              orange: '#f97316',
+              amber: '#f59e0b',
+              purple: '#8b5cf6',
+              bg: '#f8fafc'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+      user-select: none;
+    }
+    .font-heading {
+      font-family: 'Fredoka', cursive, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+    .animate-bounce-slow {
+      animation: bounce 2s infinite;
+    }
+    .animate-pulse-slow {
+      animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- TOP NAVBAR HEADER -->
+  <header class="bg-gradient-to-r from-sky-600 via-sky-500 to-emerald-500 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-white text-xl font-bold font-heading shadow-inner border border-white/30">
+          ±7
+        </div>
+        <div>
+          <h1 class="font-heading font-bold text-lg md:text-xl tracking-wide flex items-center gap-2">
+            JELAJAH BILANGAN BULAT
+            <span class="text-xs bg-amber-400 text-slate-900 font-sans px-2 py-0.5 rounded-full font-extrabold uppercase hidden sm:inline-block">Fase D</span>
+          </h1>
+          <p class="text-xs text-sky-100 hidden sm:block">Media Pembelajaran Interaktif Matematika Kelas VII</p>
+        </div>
+      </div>
+
+      <!-- Controls & Progress -->
+      <div class="flex items-center space-x-2 md:space-x-4">
+        <!-- Audio Controls -->
+        <button id="bgmToggleBtn" onclick="toggleBGM()" class="p-2 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-medium flex items-center gap-1.5 transition">
+          <i id="bgmIcon" class="fas fa-volume-mute text-amber-300"></i>
+          <span id="bgmText" class="hidden md:inline">Musik: Off</span>
+        </button>
+
+        <button id="sfxToggleBtn" onclick="toggleSFX()" class="p-2 px-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-medium flex items-center gap-1.5 transition">
+          <i id="sfxIcon" class="fas fa-bell text-emerald-300"></i>
+          <span id="sfxText" class="hidden md:inline">Suara: On</span>
+        </button>
+
+        <!-- Progress Indicator -->
+        <div class="hidden lg:flex items-center gap-2 bg-slate-900/30 px-3 py-1.5 rounded-xl border border-white/10">
+          <span class="text-xs font-semibold">Progres:</span>
+          <div class="w-24 bg-slate-700 h-2.5 rounded-full overflow-hidden">
+            <div id="overallProgressBar" class="bg-emerald-400 h-full transition-all duration-500" style="width: 10%;"></div>
+          </div>
+          <span id="overallProgressText" class="text-xs font-bold text-emerald-300">10%</span>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button onclick="toggleMobileNav()" class="md:hidden p-2 text-white hover:bg-white/10 rounded-lg">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN NAVIGATION TABS (Desktop) -->
+    <nav class="hidden md:block bg-slate-900/20 backdrop-blur-md border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 flex space-x-1 overflow-x-auto text-sm font-medium py-1 custom-scrollbar">
+        <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-house"></i> Beranda
+        </button>
+        <button onclick="navigateTo('petunjuk')" id="nav-petunjuk" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-circle-info"></i> Petunjuk
+        </button>
+        <button onclick="navigateTo('tujuan')" id="nav-tujuan" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-bullseye"></i> Tujuan
+        </button>
+        <button onclick="navigateTo('materi')" id="nav-materi" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-book-open"></i> Materi
+        </button>
+        <button onclick="navigateTo('simulasi')" id="nav-simulasi" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-flask"></i> Simulasi
+        </button>
+        <button onclick="navigateTo('game')" id="nav-game" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-gamepad"></i> Game Edukasi
+        </button>
+        <button onclick="navigateTo('evaluasi')" id="nav-evaluasi" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-clipboard-check"></i> Kuis Evaluasi
+        </button>
+        <button onclick="navigateTo('profil')" id="nav-profil" class="nav-btn px-4 py-2 rounded-lg flex items-center gap-2 transition text-sky-100 hover:bg-white/10">
+          <i class="fas fa-user-graduate"></i> Profil
+        </button>
+      </div>
+    </nav>
+
+    <!-- MOBILE NAVIGATION MENU -->
+    <div id="mobileNavMenu" class="hidden md:hidden bg-sky-800 border-t border-sky-700 px-4 py-3 space-y-2">
+      <button onclick="navigateTo('home'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-house w-5"></i> Beranda
+      </button>
+      <button onclick="navigateTo('petunjuk'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-circle-info w-5"></i> Petunjuk Penggunaan
+      </button>
+      <button onclick="navigateTo('tujuan'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-bullseye w-5"></i> Tujuan Pembelajaran
+      </button>
+      <button onclick="navigateTo('materi'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-book-open w-5"></i> Modul Materi
+      </button>
+      <button onclick="navigateTo('simulasi'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-flask w-5"></i> Simulasi Garis Bilangan
+      </button>
+      <button onclick="navigateTo('game'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-gamepad w-5"></i> Game Edukasi
+      </button>
+      <button onclick="navigateTo('evaluasi'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-clipboard-check w-5"></i> Evaluasi / Kuis
+      </button>
+      <button onclick="navigateTo('profil'); toggleMobileNav()" class="w-full text-left px-3 py-2 rounded-lg text-white hover:bg-sky-700 flex items-center gap-3">
+        <i class="fas fa-user-graduate w-5"></i> Profil Pengembang
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+
+    <!-- 1. HALAMAN PEMBUKA (COVER / BERANDA) -->
+    <section id="page-home" class="page-section">
+      <div class="bg-gradient-to-br from-sky-500 via-sky-600 to-emerald-600 rounded-3xl text-white p-6 md:p-12 shadow-xl border border-sky-400/30 relative overflow-hidden">
+        <!-- Background Math Doodles/Bubbles -->
+        <div class="absolute top-4 left-10 text-6xl opacity-10 font-bold font-heading select-none animate-bounce-slow">+12</div>
+        <div class="absolute bottom-6 right-12 text-7xl opacity-10 font-bold font-heading select-none animate-pulse-slow">-25</div>
+        <div class="absolute top-1/2 right-1/4 text-5xl opacity-10 font-bold font-heading select-none animate-bounce-slow">×0</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+          <div class="md:col-span-7 space-y-6 text-center md:text-left">
+            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/30 text-xs md:text-sm font-semibold tracking-wider uppercase">
+              <i class="fas fa-graduation-cap text-amber-300"></i> Kurikulum Merdeka - Matematika Kelas VII
+            </div>
+            
+            <h1 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight text-white drop-shadow-md">
+              JELAJAH <br class="hidden sm:inline"><span class="text-amber-300 underline decoration-wavy decoration-amber-400">BILANGAN BULAT</span>
+            </h1>
+
+            <p class="text-sky-100 text-base md:text-lg leading-relaxed max-w-xl">
+              Petualangan interaktif memahami bilangan positif, negatif, nol, garis bilangan, dan operasi hitung lewat animasi, simulasi seru, dan mini game interaktif!
+            </p>
+
+            <div class="pt-2 flex flex-wrap gap-4 justify-center md:justify-start">
+              <button onclick="navigateTo('materi')" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-heading font-extrabold text-lg px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-200 flex items-center gap-3">
+                <i class="fas fa-play text-xl"></i> MULAI BELAJAR
+              </button>
+              <button onclick="navigateTo('simulasi')" class="bg-white/10 hover:bg-white/20 border-2 border-white/40 text-white font-heading font-bold text-lg px-6 py-4 rounded-2xl shadow backdrop-blur-md transition flex items-center gap-2">
+                <i class="fas fa-flask"></i> Coba Simulasi
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero Illustration Canvas/Graphics -->
+          <div class="md:col-span-5 flex justify-center">
+            <div class="relative w-full max-w-sm bg-white/10 backdrop-blur-lg p-6 rounded-3xl border border-white/30 shadow-2xl text-center">
+              <div class="flex justify-around items-center mb-4">
+                <span class="w-16 h-16 bg-rose-500 text-white rounded-2xl flex items-center justify-center font-heading text-2xl font-bold shadow-lg transform -rotate-6">-15</span>
+                <span class="w-12 h-12 bg-amber-400 text-slate-900 rounded-full flex items-center justify-center font-heading text-xl font-bold shadow-md">0</span>
+                <span class="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center font-heading text-2xl font-bold shadow-lg transform rotate-6">+28</span>
+              </div>
+              
+              <!-- Mini Visual Number Line Canvas preview -->
+              <div class="bg-slate-900/50 p-4 rounded-2xl border border-white/20 mb-3">
+                <p class="text-xs text-sky-200 mb-2 font-semibold"><i class="fas fa-arrows-left-right text-amber-300 mr-1"></i> Garis Bilangan Interaktif</p>
+                <div class="flex items-center justify-between text-xs text-white font-mono border-b-2 border-amber-400 pb-1">
+                  <span>-3</span>
+                  <span>-2</span>
+                  <span>-1</span>
+                  <span class="text-amber-300 font-bold">0</span>
+                  <span>+1</span>
+                  <span>+2</span>
+                  <span>+3</span>
+                </div>
+              </div>
+              <p class="text-xs text-sky-100 italic">"Belajar matematika jadi lebih gampang, visual, dan menyenangkan!"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Feature Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+        <div onclick="navigateTo('materi')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-sky-400 cursor-pointer transition flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl font-bold">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-slate-800">8 Sub-Materi</h3>
+            <p class="text-xs text-slate-500">Konsep & latihan terstruktur</p>
+          </div>
+        </div>
+
+        <div onclick="navigateTo('simulasi')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-emerald-400 cursor-pointer transition flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+            <i class="fas fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-slate-800">Simulasi Interaktif</h3>
+            <p class="text-xs text-slate-500">Eksperimen garis bilangan</p>
+          </div>
+        </div>
+
+        <div onclick="navigateTo('game')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-amber-400 cursor-pointer transition flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl font-bold">
+            <i class="fas fa-gamepad"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-slate-800">3 Game Edukasi</h3>
+            <p class="text-xs text-slate-500">Bermain sambil mengasah logika</p>
+          </div>
+        </div>
+
+        <div onclick="navigateTo('evaluasi')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-purple-400 cursor-pointer transition flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl font-bold">
+            <i class="fas fa-file-signature"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-slate-800">Evaluasi 15 Soal</h3>
+            <p class="text-xs text-slate-500">Uji pemahaman & skor instan</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HALAMAN PETUNJUK PENGGUNAAN -->
+    <section id="page-petunjuk" class="page-section hidden">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+          <div class="w-10 h-10 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl">
+            <i class="fas fa-circle-info"></i>
+          </div>
+          <div>
+            <h2 class="font-heading font-bold text-2xl text-slate-800">Petunjuk Penggunaan Media</h2>
+            <p class="text-xs text-slate-500">Panduan lengkap cara mengoperasikan Media Pembelajaran Interaktif ini</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-sky-50 p-5 rounded-2xl border border-sky-100 space-y-4">
+            <h3 class="font-heading font-bold text-sky-900 text-lg flex items-center gap-2">
+              <i class="fas fa-compass text-sky-600"></i> Navigation & Tombol Utama
+            </h3>
+            <ul class="space-y-3 text-sm text-slate-700">
+              <li class="flex items-start gap-2">
+                <i class="fas fa-check-circle text-sky-600 mt-1"></i>
+                <span><strong>Menu Header:</strong> Gunakan bilah menu atas untuk berpindah antar halaman (Materi, Simulasi, Game, Evaluasi).</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fas fa-check-circle text-sky-600 mt-1"></i>
+                <span><strong>Musik & Suara:</strong> Klik ikon <i class="fas fa-volume-mute"></i> di kanan atas untuk mengaktifkan musik latar atau efek suara.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fas fa-check-circle text-sky-600 mt-1"></i>
+                <span><strong>Tombol Navigasi Bawah:</strong> Gunakan tombol "Selanjutnya" dan "Sebelumnya" untuk menjelajahi halaman secara runtut.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 space-y-4">
+            <h3 class="font-heading font-bold text-emerald-900 text-lg flex items-center gap-2">
+              <i class="fas fa-gamepad text-emerald-600"></i> Alur Belajar yang Disarankan
+            </h3>
+            <ol class="space-y-3 text-sm text-slate-700 list-decimal list-inside">
+              <li class="pl-1">Baca <strong>Tujuan Pembelajaran</strong> untuk mengetahui kompetensi target.</li>
+              <li class="pl-1">Pelajari <strong>Materi Pembelajaran</strong> secara bertahap dari bab 1 hingga 8.</li>
+              <li class="pl-1">Coba <strong>Simulasi Interaktif</strong> untuk memvisualisasikan operasi garis bilangan.</li>
+              <li class="pl-1">Mainkan <strong>3 Game Edukasi</strong> untuk mengasah pemahaman dengan menyenangkan.</li>
+              <li class="pl-1">Kerjakan <strong>Kuis Evaluasi</strong> 15 soal untuk mengukur tingkat keberhasilanmu.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs md:text-sm text-amber-800 flex items-center gap-3">
+          <i class="fas fa-lightbulb text-amber-500 text-2xl flex-shrink-0"></i>
+          <span><strong>Tips:</strong> Media ini bersifat mandiri dan fleksibel. Kamu dapat mengulangi simulasi, game, maupun kuis kapan saja sampai benar-benar paham!</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HALAMAN TUJUAN PEMBELAJARAN -->
+    <section id="page-tujuan" class="page-section hidden">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+          <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <div>
+            <h2 class="font-heading font-bold text-2xl text-slate-800">Capaian & Tujuan Pembelajaran</h2>
+            <p class="text-xs text-slate-500">Target kompetensi matematika Fase D (Kelas VII) - Kurikulum Merdeka</p>
+          </div>
+        </div>
+
+        <div class="mb-6 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+          <h3 class="font-heading font-bold text-slate-800 text-base mb-1 flex items-center gap-2">
+            <i class="fas fa-bookmark text-sky-600"></i> Capaian Pembelajaran (CP) Elemen Bilangan:
+          </h3>
+          <p class="text-sm text-slate-600 italic">
+            "Peserta didik dapat membaca, menulis, dan membandingkan bilangan bulat, serta menerapkan operasi aritmetika pada bilangan bulat untuk menyelesaikan masalah kontekstual."
+          </p>
+        </div>
+
+        <h3 class="font-heading font-bold text-slate-800 text-lg mb-4">Indikator Tujuan Pembelajaran (TP):</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-start gap-3 p-4 bg-sky-50/50 rounded-xl border border-sky-100">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center flex-shrink-0">1</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Pengertian Bilangan Bulat</h4>
+              <p class="text-xs text-slate-600">Memahami pengertian dan membedakan bilangan bulat positif, negatif, dan nol.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-4 bg-sky-50/50 rounded-xl border border-sky-100">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center flex-shrink-0">2</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Membandingkan Bilangan</h4>
+              <p class="text-xs text-slate-600">Mengidentifikasi, membandingkan, dan mengurutkan berbagai bilangan bulat.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-4 bg-sky-50/50 rounded-xl border border-sky-100">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center flex-shrink-0">3</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Representasi Garis Bilangan</h4>
+              <p class="text-xs text-slate-600">Menentukan letak dan pergeseran bilangan bulat pada garis bilangan.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-4 bg-sky-50/50 rounded-xl border border-sky-100">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center flex-shrink-0">4</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Penjumlahan & Pengurangan</h4>
+              <p class="text-xs text-slate-600">Melakukan operasi penjumlahan dan pengurangan bilangan bulat dengan tepat.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-4 bg-sky-50/50 rounded-xl border border-sky-100">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center flex-shrink-0">5</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Perkalian & Pembagian</h4>
+              <p class="text-xs text-slate-600">Memahami sifat serta hasil operasi perkalian dan pembagian bilangan bulat.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-4 bg-sky-50/50 rounded-xl border border-sky-100">
+            <div class="w-8 h-8 rounded-lg bg-sky-600 text-white font-bold flex items-center justify-center flex-shrink-0">6</div>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">Penyelesaian Masalah Kontekstual</h4>
+              <p class="text-xs text-slate-600">Menyelesaikan soal cerita sehari-hari berkaitan dengan suhu, kedalaman, dan transaksi keuangan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. HALAMAN MATERI PEMBELAJARAN (8 SUB-BAB) -->
+    <section id="page-materi" class="page-section hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Sidebar Sub-Materi Nav -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-3xl shadow-sm border border-slate-200">
+          <h3 class="font-heading font-bold text-slate-800 text-base mb-3 flex items-center gap-2">
+            <i class="fas fa-list-ol text-sky-600"></i> Daftar Subbab Materi
+          </h3>
+          <div class="space-y-1.5 text-xs font-medium" id="materiSubMenu">
+            <button onclick="loadSubMateri(1)" id="sub-btn-1" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between bg-sky-600 text-white font-semibold">
+              <span>1. Pengertian Bilangan Bulat</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(2)" id="sub-btn-2" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>2. Positif, Negatif & Nol</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(3)" id="sub-btn-3" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>3. Membandingkan & Mengurutkan</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(4)" id="sub-btn-4" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>4. Garis Bilangan</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(5)" id="sub-btn-5" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>5. Penjumlahan Bilangan Bulat</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(6)" id="sub-btn-6" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>6. Pengurangan Bilangan Bulat</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(7)" id="sub-btn-7" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>7. Perkalian & Pembagian</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            <button onclick="loadSubMateri(8)" id="sub-btn-8" class="w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100">
+              <span>8. Penerapan Kontekstual</span>
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Detail Content Display -->
+        <div class="lg:col-span-8 bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-slate-200 min-h-[500px] flex flex-col justify-between" id="materiContentBox">
+          <!-- Dynamic Content Loaded via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HALAMAN SIMULASI INTERAKTIF -->
+    <section id="page-simulasi" class="page-section hidden">
+      <div class="space-y-6">
+        <!-- Interactive Number Line Simulator Card -->
+        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+          <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+            <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
+              <i class="fas fa-flask"></i>
+            </div>
+            <div>
+              <h2 class="font-heading font-bold text-2xl text-slate-800">Simulasi Garis Bilangan Interaktif</h2>
+              <p class="text-xs text-slate-500">Visualisasikan pergerakan bilangan positif (ke kanan) dan negatif (ke kiri)</p>
+            </div>
+          </div>
+
+          <!-- Controls for Simulation -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Bilangan Awal ($a$):</label>
+              <input type="number" id="simValA" value="2" min="-10" max="10" class="w-full border border-slate-300 rounded-xl p-2.5 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Operasi Hitung:</label>
+              <select id="simOp" class="w-full border border-slate-300 rounded-xl p-2.5 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+                <option value="+">Penjumlahan (+)</option>
+                <option value="-">Pengurangan (-)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Bilangan Kedua ($b$):</label>
+              <input type="number" id="simValB" value="-5" min="-10" max="10" class="w-full border border-slate-300 rounded-xl p-2.5 text-center font-bold text-slate-800 focus:ring-2 focus:ring-sky-500 outline-none">
+            </div>
+          </div>
+
+          <div class="text-center mb-6">
+            <button onclick="runNumberLineSim()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-heading font-bold text-base px-8 py-3 rounded-2xl shadow-md transition flex items-center gap-2 mx-auto">
+              <i class="fas fa-play"></i> Jalankan Simulasi
+            </button>
+          </div>
+
+          <!-- Visual Canvas / Display Area -->
+          <div class="bg-slate-900 rounded-2xl p-6 border border-slate-700 text-white overflow-x-auto relative min-h-[220px] flex flex-col justify-center">
+            <div id="simMathExpression" class="text-center font-heading text-2xl md:text-3xl font-bold text-amber-300 mb-6">
+              2 + (-5) = -3
+            </div>
+
+            <!-- Canvas Graphic for Number Line -->
+            <div class="w-full min-w-[600px] relative py-8 px-4" id="numberLineCanvasWrapper">
+              <!-- Number line track -->
+              <div class="h-2 bg-sky-400 rounded-full w-full relative"></div>
+              <!-- Ticks & Markers rendered dynamically -->
+              <div id="simTicksContainer" class="flex justify-between w-full relative -top-3"></div>
+            </div>
+
+            <div id="simExplanationText" class="mt-4 text-center text-xs md:text-sm text-sky-200 bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+              Mulai dari angka 0, melangkah 2 satuan ke kanan (+2), lalu melangkah 5 satuan ke kiri (-5), sehingga berhenti di angka -3.
+            </div>
+          </div>
+        </div>
+
+        <!-- Kalkulator Bilangan Bulat -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+          <h3 class="font-heading font-bold text-xl text-slate-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-calculator text-sky-600"></i> Kalkulator Bilangan Bulat Interaktif
+          </h3>
+          <p class="text-xs text-slate-500 mb-4">Coba masukkan angka berapapun untuk menghitung operasi tambah, kurang, kali, dan bagi secara instan.</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 max-w-xl">
+            <input type="number" id="calcNum1" placeholder="Angka 1" class="border border-slate-300 rounded-xl p-3 text-center font-bold text-slate-800">
+            <select id="calcOperator" class="border border-slate-300 rounded-xl p-3 text-center font-bold text-slate-800 bg-slate-50">
+              <option value="+">+</option>
+              <option value="-">-</option>
+              <option value="×">×</option>
+              <option value="÷">÷</option>
+            </select>
+            <input type="number" id="calcNum2" placeholder="Angka 2" class="border border-slate-300 rounded-xl p-3 text-center font-bold text-slate-800">
+            <button onclick="calculateInteger()" class="bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl p-3 transition">
+              Hitung
+            </button>
+          </div>
+
+          <div id="calcResultDisplay" class="mt-4 p-4 bg-sky-50 rounded-2xl border border-sky-100 hidden">
+            <span class="text-xs text-sky-600 font-bold uppercase block">Hasil Perhitungan:</span>
+            <span id="calcResultText" class="text-2xl font-heading font-extrabold text-slate-800"></span>
+            <p id="calcLogicText" class="text-xs text-slate-600 mt-1"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. HALAMAN GAME EDUKASI (3 MINI GAMES) -->
+    <section id="page-game" class="page-section hidden">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <!-- Game Header & Tabs -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-100 pb-4 mb-6 gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl">
+              <i class="fas fa-gamepad"></i>
+            </div>
+            <div>
+              <h2 class="font-heading font-bold text-2xl text-slate-800">Arena Game Edukasi Bilangan</h2>
+              <p class="text-xs text-slate-500">Pilih salah satu game di bawah ini untuk menguji ketangkasanmu!</p>
+            </div>
+          </div>
+
+          <div class="flex bg-slate-100 p-1 rounded-2xl gap-1 text-xs font-heading font-bold">
+            <button onclick="switchGameTab('game1')" id="tab-game1" class="px-4 py-2 rounded-xl bg-amber-400 text-slate-900 shadow-sm transition">
+              1. Tebak Bilangan
+            </button>
+            <button onclick="switchGameTab('game2')" id="tab-game2" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition">
+              2. Garis Bilangan
+            </button>
+            <button onclick="switchGameTab('game3')" id="tab-game3" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition">
+              3. Petualangan Bilangan
+            </button>
+          </div>
+        </div>
+
+        <!-- GAME 1: TEBAK BILANGAN -->
+        <div id="game-container-1" class="game-module">
+          <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl p-6 mb-6 flex justify-between items-center shadow-md">
+            <div>
+              <h3 class="font-heading font-bold text-xl"><i class="fas fa-lightbulb mr-2"></i> Game 1: Tebak Bilangan Rahasia</h3>
+              <p class="text-xs text-amber-100">Baca petunjuknya, lalu tebak berapa bilangan yang dimaksud!</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs uppercase text-amber-200 font-bold block">Skor Game</span>
+              <span id="g1Score" class="text-3xl font-heading font-extrabold text-white">0</span>
+            </div>
+          </div>
+
+          <div class="max-w-xl mx-auto bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center space-y-4">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-bold text-amber-600 uppercase mb-2">Petunjuk Misteri:</p>
+              <h4 id="g1ClueText" class="font-heading font-bold text-xl text-slate-800">
+                "Aku berada 7 langkah di sebelah kiri angka 3."
+              </h4>
+            </div>
+
+            <div class="flex gap-2 justify-center">
+              <input type="number" id="g1Input" placeholder="Ketik jawaban angka..." class="border-2 border-slate-300 focus:border-amber-500 rounded-xl p-3 text-center font-bold text-lg w-48 outline-none">
+              <button onclick="checkGame1Answer()" class="bg-amber-500 hover:bg-amber-600 text-white font-heading font-bold px-6 py-3 rounded-xl shadow transition">
+                Jawab
+              </button>
+            </div>
+
+            <div id="g1Feedback" class="text-sm font-bold min-h-[24px]"></div>
+
+            <button onclick="initGame1()" class="text-xs text-slate-500 hover:text-slate-800 underline font-semibold mt-2">
+              <i class="fas fa-rotate-right mr-1"></i> Soal Berikutnya
+            </button>
+          </div>
+        </div>
+
+        <!-- GAME 2: POSISI GARIS BILANGAN -->
+        <div id="game-container-2" class="game-module hidden">
+          <div class="bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-2xl p-6 mb-6 flex justify-between items-center shadow-md">
+            <div>
+              <h3 class="font-heading font-bold text-xl"><i class="fas fa-bullseye mr-2"></i> Game 2: Posisi Garis Bilangan</h3>
+              <p class="text-xs text-sky-100">Klik tombol angka pada garis bilangan yang sesuai dengan target!</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs uppercase text-sky-200 font-bold block">Skor Game</span>
+              <span id="g2Score" class="text-3xl font-heading font-extrabold text-white">0</span>
+            </div>
+          </div>
+
+          <div class="max-w-2xl mx-auto text-center space-y-6">
+            <div class="bg-sky-50 p-6 rounded-2xl border border-sky-100">
+              <span class="text-xs font-bold text-sky-600 uppercase">Target Cari Angka:</span>
+              <div id="g2TargetNumber" class="text-4xl font-heading font-extrabold text-sky-800 my-2">-6</div>
+              <p class="text-xs text-slate-600">Pilih titik yang benar di bawah ini:</p>
+            </div>
+
+            <!-- Interactive Number Line Buttons (-10 to +10) -->
+            <div class="bg-slate-900 p-6 rounded-2xl overflow-x-auto shadow-inner">
+              <div id="g2ButtonGrid" class="flex justify-between items-center gap-1 min-w-[500px]">
+                <!-- Buttons dynamically generated -->
+              </div>
+            </div>
+
+            <div id="g2Feedback" class="text-sm font-bold min-h-[24px]"></div>
+          </div>
+        </div>
+
+        <!-- GAME 3: PETUALANGAN BILANGAN -->
+        <div id="game-container-3" class="game-module hidden">
+          <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl p-6 mb-6 flex justify-between items-center shadow-md">
+            <div>
+              <h3 class="font-heading font-bold text-xl"><i class="fas fa-shield-cat mr-2"></i> Game 3: Petualangan Matematika</h3>
+              <p class="text-xs text-emerald-100">Kalahkan Monster Matematika dengan menjawab soal operasi hitung!</p>
+            </div>
+            <div class="flex items-center gap-4 text-right">
+              <div>
+                <span class="text-xs uppercase text-emerald-200 font-bold block">Level</span>
+                <span id="g3Level" class="text-2xl font-heading font-extrabold text-white">1</span>
+              </div>
+              <div>
+                <span class="text-xs uppercase text-emerald-200 font-bold block">Skor</span>
+                <span id="g3Score" class="text-3xl font-heading font-extrabold text-white">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="max-w-xl mx-auto bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-6">
+            <!-- Monster & Hero Battle UI -->
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+              <div class="text-center">
+                <div class="text-4xl mb-1">🧙‍♂️</div>
+                <div class="text-xs font-bold text-slate-700">Pahlawan Mat</div>
+                <div class="w-20 bg-slate-200 h-2 rounded-full overflow-hidden mt-1">
+                  <div id="g3HeroHP" class="bg-emerald-500 h-full w-full"></div>
+                </div>
+              </div>
+
+              <div class="text-center font-heading font-bold text-xs text-rose-500 uppercase tracking-widest animate-pulse">
+                VS
+              </div>
+
+              <div class="text-center">
+                <div class="text-4xl mb-1" id="g3MonsterAvatar">👾</div>
+                <div class="text-xs font-bold text-slate-700" id="g3MonsterName">Monster Bilangan</div>
+                <div class="w-20 bg-slate-200 h-2 rounded-full overflow-hidden mt-1">
+                  <div id="g3MonsterHP" class="bg-rose-500 h-full w-full"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Battle Question -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 text-center">
+              <span class="text-xs text-slate-500 font-semibold block mb-1">Tantangan Monster:</span>
+              <div id="g3QuestionText" class="font-heading font-extrabold text-2xl text-slate-800">
+                (-8) + 15 = ?
+              </div>
+            </div>
+
+            <!-- Choice Options Grid -->
+            <div id="g3OptionsGrid" class="grid grid-cols-2 gap-3">
+              <!-- Choices rendered dynamically -->
+            </div>
+
+            <div id="g3Feedback" class="text-center text-sm font-bold min-h-[24px]"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. HALAMAN EVALUASI / KUIS (15 SOAL) -->
+    <section id="page-evaluasi" class="page-section hidden">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+        <!-- Quiz Intro Banner -->
+        <div id="quizIntroCard" class="text-center max-w-2xl mx-auto py-8 space-y-6">
+          <div class="w-20 h-20 bg-purple-100 text-purple-600 rounded-3xl flex items-center justify-center text-4xl mx-auto shadow-sm">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+          <div>
+            <h2 class="font-heading font-extrabold text-3xl text-slate-800">Evaluasi Pemahaman Bilangan Bulat</h2>
+            <p class="text-slate-600 text-sm mt-2 leading-relaxed">
+              Kuis ini terdiri dari <strong>15 soal pilihan ganda</strong> dengan variasi tingkat kesulitan (Mudah, Sedang, Sulit). Di akhir kuis, kamu dapat melihat skor persentase, kategori hasil belajar, dan pembahasan lengkap.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-2">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="block font-heading font-bold text-xl text-sky-600">15</span>
+              <span class="text-xs text-slate-500 font-medium">Soal Pilihan</span>
+            </div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="block font-heading font-bold text-xl text-emerald-600">100</span>
+              <span class="text-xs text-slate-500 font-medium">Skor Maksimal</span>
+            </div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <span class="block font-heading font-bold text-xl text-amber-600">100%</span>
+              <span class="text-xs text-slate-500 font-medium">Instan Hasil</span>
+            </div>
+          </div>
+
+          <button onclick="startQuiz()" class="bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-lg px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition flex items-center gap-2 mx-auto">
+            <i class="fas fa-play"></i> Mulai Kerjakan Kuis
+          </button>
+        </div>
+
+        <!-- Active Quiz Area -->
+        <div id="quizActiveCard" class="hidden max-w-3xl mx-auto space-y-6">
+          <!-- Quiz Top Stats -->
+          <div class="flex items-center justify-between bg-purple-50 p-4 rounded-2xl border border-purple-100">
+            <span class="text-xs font-bold text-purple-700 uppercase" id="quizNumberBadge">Soal 1 dari 15</span>
+            <span class="text-xs font-bold px-2.5 py-1 bg-purple-200 text-purple-800 rounded-full" id="quizLevelBadge">Tingkat: Mudah</span>
+          </div>
+
+          <!-- Question Content -->
+          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <h3 id="quizQuestionText" class="font-heading font-bold text-lg md:text-xl text-slate-800 leading-snug">
+              <!-- Question text -->
+            </h3>
+          </div>
+
+          <!-- Answers Grid -->
+          <div class="space-y-3" id="quizOptionsContainer">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Navigation inside quiz -->
+          <div class="flex justify-between items-center pt-4">
+            <button onclick="prevQuestion()" id="quizPrevBtn" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-100 disabled:opacity-40">
+              <i class="fas fa-arrow-left mr-1"></i> Sebelumnya
+            </button>
+            <button onclick="nextQuestion()" id="quizNextBtn" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-sm shadow">
+              Selanjutnya <i class="fas fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Screen -->
+        <div id="quizResultCard" class="hidden max-w-2xl mx-auto text-center space-y-6 py-6">
+          <div class="p-8 bg-gradient-to-br from-purple-600 to-indigo-700 rounded-3xl text-white shadow-xl">
+            <span class="text-xs font-bold uppercase tracking-widest text-purple-200">Hasil Evaluasi Belajar</span>
+            <div id="resultScoreText" class="text-6xl font-heading font-extrabold my-4 text-amber-300">
+              87%
+            </div>
+            <h3 id="resultCategoryBadge" class="inline-block bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full font-heading font-bold text-lg border border-white/30 mb-2">
+              Sangat Baik
+            </h3>
+            <p id="resultMotivationalMessage" class="text-xs md:text-sm text-purple-100 max-w-md mx-auto">
+              Luar biasa! Kamu telah menguasai konsep dasar dan operasi bilangan bulat dengan sangat memuaskan!
+            </p>
+          </div>
+
+          <!-- Summary Breakdown -->
+          <div class="grid grid-cols-2 gap-4 text-left">
+            <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center gap-3">
+              <i class="fas fa-circle-check text-emerald-600 text-2xl"></i>
+              <div>
+                <span class="text-xs text-slate-500 font-bold block">Jawaban Benar</span>
+                <span id="resultCorrectCount" class="font-heading font-bold text-lg text-emerald-700">13 Soal</span>
+              </div>
+            </div>
+
+            <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200 flex items-center gap-3">
+              <i class="fas fa-circle-xmark text-rose-600 text-2xl"></i>
+              <div>
+                <span class="text-xs text-slate-500 font-bold block">Jawaban Salah</span>
+                <span id="resultWrongCount" class="font-heading font-bold text-lg text-rose-700">2 Soal</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pembahasan Details Button / Accordion -->
+          <div class="text-left bg-slate-50 p-5 rounded-2xl border border-slate-200">
+            <h4 class="font-heading font-bold text-slate-800 text-base mb-3 flex items-center gap-2">
+              <i class="fas fa-book-bookmark text-purple-600"></i> Kunci Jawaban & Pembahasan Lengkap:
+            </h4>
+            <div id="quizPembahasanList" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-2 text-xs">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <div class="flex gap-4 justify-center">
+            <button onclick="startQuiz()" class="bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold px-6 py-3 rounded-xl shadow transition">
+              <i class="fas fa-rotate-right mr-2"></i> Ulangi Kuis Evaluasi
+            </button>
+            <button onclick="navigateTo('penutup')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-heading font-bold px-6 py-3 rounded-xl shadow transition">
+              Selesai & Ke Penutup <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. HALAMAN PROFIL PENGEMBANG -->
+    <section id="page-profil" class="page-section hidden">
+      <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 max-w-3xl mx-auto">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+          <div class="w-10 h-10 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div>
+            <h2 class="font-heading font-bold text-2xl text-slate-800">Profil Pengembang Media</h2>
+            <p class="text-xs text-slate-500">Informasi identitas pengembang & metadata aplikasi MPI</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-4 text-center">
+            <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-sky-500 to-emerald-400 p-1 mx-auto shadow-md">
+              <div class="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-5xl text-sky-700 font-bold font-heading">
+                👩‍🏫
+              </div>
+            </div>
+            <h3 class="font-heading font-bold text-lg text-slate-800 mt-3">Tim Pengembang MPI</h3>
+            <span class="text-xs text-sky-600 font-semibold bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
+              Pengembang Media Matematika
+            </span>
+          </div>
+
+          <div class="md:col-span-8 space-y-3 text-xs md:text-sm text-slate-700 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+            <div class="flex border-b border-slate-200 pb-2">
+              <span class="w-32 font-bold text-slate-500">Nama Media:</span>
+              <span class="font-semibold text-slate-800">MPI "Jelajah Bilangan Bulat"</span>
+            </div>
+            <div class="flex border-b border-slate-200 pb-2">
+              <span class="w-32 font-bold text-slate-500">Mata Pelajaran:</span>
+              <span class="text-slate-800">Matematika SMP/MTs</span>
+            </div>
+            <div class="flex border-b border-slate-200 pb-2">
+              <span class="w-32 font-bold text-slate-500">Kelas / Fase:</span>
+              <span class="text-slate-800">Kelas VII / Fase D (Kurikulum Merdeka)</span>
+            </div>
+            <div class="flex border-b border-slate-200 pb-2">
+              <span class="w-32 font-bold text-slate-500">Teknologi:</span>
+              <span class="text-slate-800">HTML5, CSS3 (Tailwind CSS), JavaScript (Web Audio Synth API)</span>
+            </div>
+            <div class="flex">
+              <span class="w-32 font-bold text-slate-500">Deskripsi:</span>
+              <span class="text-slate-800">Media Pembelajaran Interaktif mandiri berbasis website yang responsif, terintegrasi audio visual, simulasi garis bilangan, mini-game edukatif, serta kuis otomatis instan.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. HALAMAN PENUTUP & APRESIASI -->
+    <section id="page-penutup" class="page-section hidden">
+      <div class="bg-gradient-to-br from-emerald-500 via-sky-600 to-indigo-700 text-white rounded-3xl p-8 md:p-12 shadow-xl text-center max-w-3xl mx-auto space-y-6 relative overflow-hidden">
+        <div class="text-6xl mb-2 animate-bounce">🎓</div>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-amber-300">
+          HEBAT! KAMU TELAH MENYELESAIKAN MODUL!
+        </h2>
+        <p class="text-sky-100 text-sm md:text-base leading-relaxed max-w-lg mx-auto">
+          Selamat telah menjelajahi seluruh materi, simulasi, permainan, dan kuis bilangan bulat. Teruslah semangat berlatih dan menjelajahi keajaiban matematika lainnya!
+        </p>
+
+        <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 max-w-md mx-auto italic text-xs md:text-sm text-sky-100">
+          "Matematika bukan tentang menghafal rumus, melainkan tentang cara melatih pola pikir yang logis dan solutif."
+        </div>
+
+        <div class="pt-4 flex flex-wrap gap-4 justify-center">
+          <button onclick="navigateTo('home')" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-heading font-bold text-base px-8 py-3.5 rounded-2xl shadow-lg transition flex items-center gap-2">
+            <i class="fas fa-house"></i> Kembali ke Halaman Utama
+          </button>
+          <button onclick="navigateTo('evaluasi')" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-heading font-bold text-base px-6 py-3.5 rounded-2xl shadow transition">
+            <i class="fas fa-rotate-right"></i> Coba Kuis Lagi
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 mt-8">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>© 2026 Media Pembelajaran Interaktif (MPI) - Jelajah Bilangan Bulat Kelas VII SMP/MTs.</p>
+      <p class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Siap Dijalankan Offline
+      </p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    /* ==========================================================================
+       1. GLOBAL STATE & NAVIGATION
+       ========================================================================== */
+    let currentState = {
+      currentPage: 'home',
+      currentSubMateri: 1,
+      bgmActive: false,
+      sfxActive: true,
+      audioCtx: null,
+      g1Score: 0,
+      g2Score: 0,
+      g3Score: 0,
+      g3HeroHP: 100,
+      g3MonsterHP: 100,
+      g3Level: 1,
+      quizAnswers: new Array(15).fill(null),
+      quizCurrentIndex: 0
+    };
+
+    const pages = ['home', 'petunjuk', 'tujuan', 'materi', 'simulasi', 'game', 'evaluasi', 'profil', 'penutup'];
+
+    function navigateTo(pageId) {
+      playSFX('click');
+      currentState.currentPage = pageId;
+
+      pages.forEach(p => {
+        const el = document.getElementById(`page-${p}`);
+        if (el) el.classList.add('hidden');
+
+        const navBtn = document.getElementById(`nav-${p}`);
+        if (navBtn) {
+          navBtn.classList.remove('bg-white/20', 'text-amber-300', 'font-bold');
+        }
+      });
+
+      const activePage = document.getElementById(`page-${pageId}`);
+      if (activePage) activePage.classList.remove('hidden');
+
+      const activeNav = document.getElementById(`nav-${pageId}`);
+      if (activeNav) {
+        activeNav.classList.add('bg-white/20', 'text-amber-300', 'font-bold');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateProgress();
+
+      // Trigger section initializations
+      if (pageId === 'materi') loadSubMateri(currentState.currentSubMateri);
+      if (pageId === 'simulasi') runNumberLineSim();
+      if (pageId === 'game') initGame1();
+    }
+
+    function toggleMobileNav() {
+      const menu = document.getElementById('mobileNavMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    function updateProgress() {
+      let percent = 10;
+      if (currentState.currentPage === 'materi') percent = 30;
+      if (currentState.currentPage === 'simulasi') percent = 50;
+      if (currentState.currentPage === 'game') percent = 70;
+      if (currentState.currentPage === 'evaluasi') percent = 90;
+      if (currentState.currentPage === 'penutup') percent = 100;
+
+      const bar = document.getElementById('overallProgressBar');
+      const txt = document.getElementById('overallProgressText');
+      if (bar) bar.style.width = `${percent}%`;
+      if (txt) txt.innerText = `${percent}%`;
+    }
+
+    /* ==========================================================================
+       2. SOUND & AUDIO SYNTHESIZER (WEB AUDIO API - 100% OFFLINE)
+       ========================================================================== */
+    function getAudioContext() {
+      if (!currentState.audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        currentState.audioCtx = new AudioContext();
+      }
+      if (currentState.audioCtx.state === 'suspended') {
+        currentState.audioCtx.resume();
+      }
+      return currentState.audioCtx;
+    }
+
+    function playSFX(type) {
+      if (!currentState.sfxActive) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'correct') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(180, now + 0.15);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        }
+      } catch (e) {
+        console.log('Audio Context error:', e);
+      }
+    }
+
+    let bgmInterval = null;
+    function toggleBGM() {
+      currentState.bgmActive = !currentState.bgmActive;
+      const icon = document.getElementById('bgmIcon');
+      const text = document.getElementById('bgmText');
+
+      if (currentState.bgmActive) {
+        icon.className = "fas fa-volume-high text-emerald-300";
+        text.innerText = "Musik: On";
+        startAmbientBGM();
+      } else {
+        icon.className = "fas fa-volume-mute text-amber-300";
+        text.innerText = "Musik: Off";
+        stopAmbientBGM();
+      }
+    }
+
+    function toggleSFX() {
+      currentState.sfxActive = !currentState.sfxActive;
+      const icon = document.getElementById('sfxIcon');
+      const text = document.getElementById('sfxText');
+
+      if (currentState.sfxActive) {
+        icon.className = "fas fa-bell text-emerald-300";
+        text.innerText = "Suara: On";
+      } else {
+        icon.className = "fas fa-bell-slash text-slate-400";
+        text.innerText = "Suara: Off";
+      }
+    }
+
+    function startAmbientBGM() {
+      if (bgmInterval) clearInterval(bgmInterval);
+      const notes = [261.63, 329.63, 392.00, 523.25]; // C, E, G, C
+      let step = 0;
+      bgmInterval = setInterval(() => {
+        if (!currentState.bgmActive) return;
+        try {
+          const ctx = getAudioContext();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(notes[step % notes.length], ctx.currentTime);
+          gain.gain.setValueAtTime(0.02, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.8);
+          step++;
+        } catch (e) {}
+      }, 1200);
+    }
+
+    function stopAmbientBGM() {
+      if (bgmInterval) clearInterval(bgmInterval);
+    }
+
+    /* ==========================================================================
+       3. MATERI PEMBELAJARAN DATA & LOADER
+       ========================================================================== */
+    const materiData = [
+      {
+        id: 1,
+        title: "1. Pengertian Bilangan Bulat",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Apa itu Bilangan Bulat?</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              <strong>Bilangan Bulat</strong> adalah himpunan bilangan yang terdiri dari bilangan bulat positif, angka nol, dan bilangan bulat negatif. Bilangan bulat <em>tidak mencakup</em> pecahan atau desimal.
+            </p>
+
+            <div class="bg-sky-50 p-4 rounded-2xl border border-sky-200">
+              <h4 class="font-bold text-sky-900 text-sm mb-2"><i class="fas fa-layer-group text-sky-600 mr-1"></i> Anggota Himpunan Bilangan Bulat:</h4>
+              <p class="font-mono text-center text-lg text-sky-800 font-bold bg-white p-3 rounded-xl border border-sky-100 shadow-sm">
+                ... , -4, -3, -2, -1, 0, 1, 2, 3, 4, ...
+              </p>
+            </div>
+
+            <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs text-amber-900">
+              <strong>Catatan Penting:</strong> Bilangan seperti $\\frac{1}{2}$, $0{,}75$, atau $3{,}14$ <u>BUKAN</u> termasuk bilangan bulat karena memiliki nilai pecahan/desimal.
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 2,
+        title: "2. Bilangan Bulat Positif, Negatif, dan Nol",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Tiga Kelompok Bilangan Bulat</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-center">
+                <span class="text-emerald-600 font-bold text-xs uppercase block">1. Bilangan Positif</span>
+                <span class="font-heading font-extrabold text-2xl text-emerald-800">+1, +2, +3 ...</span>
+                <p class="text-xs text-slate-600 mt-2">Nilai lebih besar dari 0. Berada di sebelah kanan 0.</p>
+              </div>
+
+              <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-center">
+                <span class="text-amber-600 font-bold text-xs uppercase block">2. Bilangan Nol</span>
+                <span class="font-heading font-extrabold text-2xl text-amber-800">0</span>
+                <p class="text-xs text-slate-600 mt-2">Netral (tidak positif dan tidak negatif).</p>
+              </div>
+
+              <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-center">
+                <span class="text-rose-600 font-bold text-xs uppercase block">3. Bilangan Negatif</span>
+                <span class="font-heading font-extrabold text-2xl text-rose-800">-1, -2, -3 ...</span>
+                <p class="text-xs text-slate-600 mt-2">Nilai kurang dari 0. Berada di sebelah kiri 0.</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-600 italic">
+              *Tanda tambah ($+$) pada bilangan positif biasanya tidak dituliskan. Contoh: $+5$ ditulis sebagai $5$.
+            </p>
+          </div>
+        `
+      },
+      {
+        id: 3,
+        title: "3. Membandingkan dan Mengurutkan Bilangan Bulat",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Aturan Membandingkan Bilangan</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Semakin ke <strong>kanan</strong> letak bilangan pada garis bilangan, nilainya semakin <strong>besar</strong>. Semakin ke <strong>kiri</strong>, nilainya semakin <strong>kecil</strong>.
+            </p>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2 text-sm">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sky-600">&gt;</span> : Lebih besar dari (contoh: $5 &gt; -10$)
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sky-600">&lt;</span> : Lebih kecil dari (contoh: $-8 &lt; -2$)
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sky-600 font-mono">=</span> : Sama dengan (contoh: $-4 = -4$)
+              </div>
+            </div>
+
+            <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
+              <h4 class="font-bold text-slate-800 text-xs uppercase mb-1">Contoh Soal Mengurutkan:</h4>
+              <p class="text-xs text-slate-700">Urutkan $-5, 3, -1, 0, 4$ dari yang terkecil!</p>
+              <p class="text-xs font-bold text-emerald-700 mt-1">Jawaban: $-5, -1, 0, 3, 4$</p>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 4,
+        title: "4. Garis Bilangan",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Visualisasi Garis Bilangan</h3>
+            <p class="text-slate-600 text-sm">
+              Garis bilangan adalah garis lurus horizontal dengan titik-titik yang menyajikan bilangan secara teratur.
+            </p>
+
+            <div class="bg-slate-900 text-white p-6 rounded-2xl text-center space-y-4 border border-slate-700">
+              <div class="flex justify-between items-center text-xs font-mono max-w-md mx-auto border-b-2 border-amber-400 pb-2">
+                <span class="text-rose-400">-4</span>
+                <span class="text-rose-400">-3</span>
+                <span class="text-rose-400">-2</span>
+                <span class="text-rose-400">-1</span>
+                <span class="text-amber-300 font-bold text-base">0</span>
+                <span class="text-emerald-400">+1</span>
+                <span class="text-emerald-400">+2</span>
+                <span class="text-emerald-400">+3</span>
+                <span class="text-emerald-400">+4</span>
+              </div>
+              <p class="text-xs text-sky-200">Arah Kiri = Makin Kecil (-) | Arah Kanan = Makin Besar (+)</p>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 5,
+        title: "5. Penjumlahan Bilangan Bulat",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Operasi Penjumlahan</h3>
+            <p class="text-slate-600 text-sm">
+              Menjumlahkan bilangan positif berarti melangkah ke <strong>kanan</strong>. Menjumlahkan bilangan negatif berarti melangkah ke <strong>kiri</strong>.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
+                <span class="font-bold text-sky-800 block mb-1">Positif + Positif:</span>
+                <p>$6 + 4 = 10$</p>
+              </div>
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
+                <span class="font-bold text-sky-800 block mb-1">Negatif + Negatif:</span>
+                <p>$(-5) + (-3) = -8$</p>
+              </div>
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
+                <span class="font-bold text-sky-800 block mb-1">Positif + Negatif:</span>
+                <p>$8 + (-3) = 5$</p>
+              </div>
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100">
+                <span class="font-bold text-sky-800 block mb-1">Negatif + Positif:</span>
+                <p>$(-10) + 4 = -6$</p>
+              </div>
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 6,
+        title: "6. Pengurangan Bilangan Bulat",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Operasi Pengurangan</h3>
+            <p class="text-slate-600 text-sm">
+              Mengurangi suatu bilangan sama artinya dengan <strong>menjumlahkan dengan lawan bilangan tersebut</strong>.
+            </p>
+
+            <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-sm">
+              <p class="font-bold text-amber-900 mb-2">Rumus Utama Pengurangan:</p>
+              <p class="font-mono text-center text-lg text-amber-800 font-bold bg-white p-2 rounded-xl border border-amber-200">
+                a - b = a + (-b)
+              </p>
+              <p class="font-mono text-center text-lg text-amber-800 font-bold bg-white p-2 rounded-xl border border-amber-200 mt-2">
+                a - (-b) = a + b
+              </p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
+              <strong>Contoh:</strong> $7 - (-3) = 7 + 3 = 10$
+            </div>
+          </div>
+        `
+      },
+      {
+        id: 7,
+        title: "7. Perkalian & Pembagian Bilangan Bulat",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Aturan Tanda Perkalian & Pembagian</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200">
+                <span class="font-bold text-emerald-800 block mb-1">Tanda Sama = Hasil POSITIF</span>
+                <p>$(+) \\times (+) = (+)$ &nbsp;|&nbsp; $5 \\times 4 = 20$</p>
+                <p>$(-) \\times (-) = (+)$ &nbsp;|&nbsp; $(-5) \\times (-4) = 20$</p>
+              </div>
+
+              <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200">
+                <span class="font-bold text-rose-800 block mb-1">Tanda Beda = Hasil NEGATIF</span>
+                <p>$(+) \\times (-) = (-)$ &nbsp;|&nbsp; $5 \\times (-4) = -20$</p>
+                <p>$(-) \\times (+) = (-)$ &nbsp;|&nbsp; $(-5) \\times 4 = -20$</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-600">Aturan tanda yang sama juga berlaku sepenuhnya untuk operasi <strong>Pembagian (÷)</strong>.</p>
+          </div>
+        `
+      },
+      {
+        id: 8,
+        title: "8. Penerapan Kontekstual Kehidupan Sehari-hari",
+        content: `
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-xl text-slate-800">Penerapan dalam Kehidupan Nyata</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-200 text-center">
+                <div class="text-3xl mb-1">🌡️</div>
+                <h4 class="font-bold text-sky-900">Suhu Udara</h4>
+                <p class="text-slate-600 mt-1">Suhu $5^\\circ\\text{C}$ di bawah nol ditulis $-5^\\circ\\text{C}$.</p>
+              </div>
+
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-200 text-center">
+                <div class="text-3xl mb-1">🌊</div>
+                <h4 class="font-bold text-sky-900">Kedalaman Laut</h4>
+                <p class="text-slate-600 mt-1">Kedalaman $100\\text{ meter}$ di bawah laut ditulis $-100\\text{ m}$.</p>
+              </div>
+
+              <div class="p-4 bg-sky-50 rounded-2xl border border-sky-200 text-center">
+                <div class="text-3xl mb-1">💰</div>
+                <h4 class="font-bold text-sky-900">Keuangan / Utang</h4>
+                <p class="text-slate-600 mt-1">Keuntungan bernilai $+$, sedangkan rugi/utang bernilai $-$.</p>
+              </div>
+            </div>
+          </div>
+        `
+      }
+    ];
+
+    function loadSubMateri(id) {
+      playSFX('click');
+      currentState.currentSubMateri = id;
+
+      for (let i = 1; i <= 8; i++) {
+        const btn = document.getElementById(`sub-btn-${i}`);
+        if (btn) {
+          if (i === id) {
+            btn.className = "w-full text-left p-3 rounded-xl transition flex items-center justify-between bg-sky-600 text-white font-semibold shadow-sm";
+          } else {
+            btn.className = "w-full text-left p-3 rounded-xl transition flex items-center justify-between text-slate-700 hover:bg-slate-100 font-medium";
+          }
+        }
+      }
+
+      const item = materiData.find(m => m.id === id);
+      const box = document.getElementById('materiContentBox');
+      
+      box.innerHTML = `
+        <div>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+            <span class="text-xs font-bold bg-sky-100 text-sky-700 px-3 py-1 rounded-full uppercase">Subbab ${item.id} dari 8</span>
+            <span class="text-xs text-slate-400 font-medium"><i class="fas fa-book-open mr-1"></i> Modul Belajar</span>
+          </div>
+          ${item.content}
+        </div>
+
+        <div class="flex justify-between items-center pt-6 border-t border-slate-100 mt-6">
+          <button onclick="loadSubMateri(${id > 1 ? id - 1 : 1})" ${id === 1 ? 'disabled' : ''} class="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 text-xs font-bold hover:bg-slate-100 disabled:opacity-40">
+            <i class="fas fa-arrow-left mr-1"></i> Subbab Sebelumnya
+          </button>
+          
+          ${id < 8 ? `
+            <button onclick="loadSubMateri(${id + 1})" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-heading font-bold shadow">
+              Subbab Berikutnya <i class="fas fa-arrow-right ml-1"></i>
+            </button>
+          ` : `
+            <button onclick="navigateTo('simulasi')" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-heading font-bold shadow">
+              Lanjut ke Simulasi <i class="fas fa-flask ml-1"></i>
+            </button>
+          `}
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       4. SIMULASI GARIS BILANGAN & KALKULATOR
+       ========================================================================== */
+    function runNumberLineSim() {
+      playSFX('click');
+      const valA = parseInt(document.getElementById('simValA').value) || 0;
+      const op = document.getElementById('simOp').value;
+      const valB = parseInt(document.getElementById('simValB').value) || 0;
+
+      let result = 0;
+      if (op === '+') result = valA + valB;
+      if (op === '-') result = valA - valB;
+
+      document.getElementById('simMathExpression').innerText = `${valA} ${op} (${valB}) = ${result}`;
+
+      // Render Number Line Ticks
+      const ticksContainer = document.getElementById('simTicksContainer');
+      ticksContainer.innerHTML = '';
+
+      const minRange = -10;
+      const maxRange = 10;
+
+      for (let i = minRange; i <= maxRange; i++) {
+        const isStart = (i === valA);
+        const isResult = (i === result);
+        const isZero = (i === 0);
+
+        let activeStyle = "text-slate-400";
+        let circleStyle = "bg-slate-700 w-2 h-2";
+
+        if (isZero) {
+          activeStyle = "text-amber-400 font-bold";
+          circleStyle = "bg-amber-400 w-3 h-3 ring-2 ring-amber-300/50";
+        }
+        if (isStart) {
+          activeStyle = "text-sky-400 font-extrabold";
+          circleStyle = "bg-sky-400 w-3.5 h-3.5 ring-4 ring-sky-400/40";
+        }
+        if (isResult) {
+          activeStyle = "text-emerald-400 font-extrabold";
+          circleStyle = "bg-emerald-400 w-4 h-4 ring-4 ring-emerald-400/50 animate-bounce";
+        }
+
+        ticksContainer.innerHTML += `
+          <div class="flex flex-col items-center">
+            <div class="${circleStyle} rounded-full mb-1 transition-all"></div>
+            <span class="text-[10px] font-mono ${activeStyle}">${i}</span>
+          </div>
+        `;
+      }
+
+      // Dynamic text explanation
+      let exp = `Mulai dari angka 0, melangkah ke titik awal <strong>${valA}</strong>. `;
+      if (op === '+') {
+        if (valB >= 0) exp += `Ditambah <strong>${valB}</strong> berarti bergerak ke <strong>kanan</strong> sebanyak ${valB} langkah.`;
+        else exp += `Ditambah <strong>(${valB})</strong> berarti bergerak ke <strong>kiri</strong> sebanyak ${Math.abs(valB)} langkah.`;
+      } else {
+        if (valB >= 0) exp += `Dikurangi <strong>${valB}</strong> berarti bergerak ke <strong>kiri</strong> sebanyak ${valB} langkah.`;
+        else exp += `Dikurangi <strong>(${valB})</strong> sama dengan ditambah ${Math.abs(valB)}, bergerak ke <strong>kanan</strong> sebanyak ${Math.abs(valB)} langkah.`;
+      }
+      exp += ` Berhenti di posisi akhir <strong>${result}</strong>.`;
+
+      document.getElementById('simExplanationText').innerHTML = exp;
+    }
+
+    function calculateInteger() {
+      playSFX('click');
+      const num1 = parseInt(document.getElementById('calcNum1').value);
+      const op = document.getElementById('calcOperator').value;
+      const num2 = parseInt(document.getElementById('calcNum2').value);
+
+      if (isNaN(num1) || isNaN(num2)) {
+        alert("Silakan masukkan kedua angka terlebih dahulu!");
+        return;
+      }
+
+      let res = 0;
+      let logic = "";
+
+      if (op === '+') {
+        res = num1 + num2;
+        logic = `Penjumlahan ${num1} dengan ${num2}.`;
+      } else if (op === '-') {
+        res = num1 - num2;
+        logic = `Pengurangan ${num1} dikurangi ${num2}.`;
+      } else if (op === '×') {
+        res = num1 * num2;
+        const sameSign = (num1 >= 0 && num2 >= 0) || (num1 < 0 && num2 < 0);
+        logic = sameSign ? "Tanda sama -> Hasil Positif (+)" : "Tanda berbeda -> Hasil Negatif (-)";
+      } else if (op === '÷') {
+        if (num2 === 0) {
+          res = "Tidak Terdefinisi";
+          logic = "Pembagian dengan nol tidak diperbolehkan dalam matematika.";
+        } else {
+          res = (num1 / num2);
+          if (!Number.isInteger(res)) res = res.toFixed(2);
+          const sameSign = (num1 >= 0 && num2 >= 0) || (num1 < 0 && num2 < 0);
+          logic = sameSign ? "Tanda sama -> Hasil Positif (+)" : "Tanda berbeda -> Hasil Negatif (-)";
+        }
+      }
+
+      const resBox = document.getElementById('calcResultDisplay');
+      resBox.classList.remove('hidden');
+      document.getElementById('calcResultText').innerText = `${num1} ${op} ${num2} = ${res}`;
+      document.getElementById('calcLogicText').innerText = logic;
+    }
+
+    /* ==========================================================================
+       5. GAME EDUKASI LOGIC (3 MINI GAMES)
+       ========================================================================== */
+    function switchGameTab(tab) {
+      playSFX('click');
+      ['game1', 'game2', 'game3'].forEach((t, i) => {
+        const container = document.getElementById(`game-container-${i+1}`);
+        const btn = document.getElementById(`tab-${t}`);
+
+        if (t === tab) {
+          container.classList.remove('hidden');
+          btn.className = "px-4 py-2 rounded-xl bg-amber-400 text-slate-900 shadow-sm transition font-bold";
+        } else {
+          container.classList.add('hidden');
+          btn.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition font-medium";
+        }
+      });
+
+      if (tab === 'game1') initGame1();
+      if (tab === 'game2') initGame2();
+      if (tab === 'game3') initGame3();
+    }
+
+    // GAME 1 LOGIC: TEBAK BILANGAN
+    let g1Target = 0;
+    const g1Clues = [
+      { text: "Aku berada 5 langkah di sebelah kiri angka 2.", answer: -3 },
+      { text: "Aku berada 8 langkah di sebelah kanan angka -5.", answer: 3 },
+      { text: "Jika aku dikalikan -4, hasilnya adalah 16.", answer: -4 },
+      { text: "Lawan dari bilangan -15 adalah aku.", answer: 15 },
+      { text: "Aku berada di tengah-tengah antara -6 dan 2.", answer: -2 }
+    ];
+    let g1Index = 0;
+
+    function initGame1() {
+      const q = g1Clues[g1Index % g1Clues.length];
+      g1Target = q.answer;
+      document.getElementById('g1ClueText').innerText = `"${q.text}"`;
+      document.getElementById('g1Input').value = '';
+      document.getElementById('g1Feedback').innerText = '';
+    }
+
+    function checkGame1Answer() {
+      const userAns = parseInt(document.getElementById('g1Input').value);
+      const fb = document.getElementById('g1Feedback');
+
+      if (userAns === g1Target) {
+        playSFX('correct');
+        currentState.g1Score += 20;
+        document.getElementById('g1Score').innerText = currentState.g1Score;
+        fb.className = "text-sm font-bold text-emerald-600";
+        fb.innerText = "🎉 Tepat sekali! Jawabanmu Benar!";
+        g1Index++;
+        setTimeout(initGame1, 1500);
+      } else {
+        playSFX('wrong');
+        fb.className = "text-sm font-bold text-rose-600";
+        fb.innerText = "❌ Masih kurang tepat, coba hitung lagi ya!";
+      }
+    }
+
+    // GAME 2 LOGIC: GARIS BILANGAN
+    let g2Target = 0;
+    function initGame2() {
+      g2Target = Math.floor(Math.random() * 21) - 10; // -10 to 10
+      document.getElementById('g2TargetNumber').innerText = g2Target;
+      document.getElementById('g2Feedback').innerText = '';
+
+      const grid = document.getElementById('g2ButtonGrid');
+      grid.innerHTML = '';
+
+      for (let i = -10; i <= 10; i++) {
+        grid.innerHTML += `
+          <button onclick="checkGame2Answer(${i})" class="w-8 h-10 rounded-lg bg-sky-700 hover:bg-amber-400 hover:text-slate-900 text-white font-mono font-bold text-xs transition border border-sky-500 flex items-center justify-center">
+            ${i}
+          </button>
+        `;
+      }
+    }
+
+    function checkGame2Answer(val) {
+      const fb = document.getElementById('g2Feedback');
+      if (val === g2Target) {
+        playSFX('correct');
+        currentState.g2Score += 20;
+        document.getElementById('g2Score').innerText = currentState.g2Score;
+        fb.className = "text-sm font-bold text-emerald-600";
+        fb.innerText = "🎯 Hebat! Posisi titik tepat sasaran!";
+        setTimeout(initGame2, 1200);
+      } else {
+        playSFX('wrong');
+        fb.className = "text-sm font-bold text-rose-600";
+        fb.innerText = `❌ Kamu memilih ${val}. Cari angka ${g2Target}!`;
+      }
+    }
+
+    // GAME 3 LOGIC: PETUALANGAN
+    let g3CurrentAnswer = 0;
+    function initGame3() {
+      currentState.g3HeroHP = 100;
+      currentState.g3MonsterHP = 100;
+      updateG3HealthUI();
+
+      generateG3Question();
+    }
+
+    function generateG3Question() {
+      const a = Math.floor(Math.random() * 15) - 7;
+      const b = Math.floor(Math.random() * 15) - 7;
+      const ops = ['+', '-', '×'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+
+      if (op === '+') g3CurrentAnswer = a + b;
+      if (op === '-') g3CurrentAnswer = a - b;
+      if (op === '×') g3CurrentAnswer = a * b;
+
+      document.getElementById('g3QuestionText').innerText = `(${a}) ${op} (${b}) = ?`;
+
+      // Generate 4 Choices
+      const choices = [g3CurrentAnswer];
+      while (choices.length < 4) {
+        const dummy = g3CurrentAnswer + (Math.floor(Math.random() * 10) - 5);
+        if (!choices.includes(dummy)) choices.push(dummy);
+      }
+      choices.sort(() => Math.random() - 0.5);
+
+      const grid = document.getElementById('g3OptionsGrid');
+      grid.innerHTML = '';
+      choices.forEach(c => {
+        grid.innerHTML += `
+          <button onclick="checkGame3Answer(${c})" class="p-3 bg-white hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-400 rounded-xl font-heading font-bold text-lg text-slate-800 transition">
+            ${c}
+          </button>
+        `;
+      });
+    }
+
+    function checkGame3Answer(val) {
+      const fb = document.getElementById('g3Feedback');
+      if (val === g3CurrentAnswer) {
+        playSFX('correct');
+        currentState.g3MonsterHP -= 35;
+        currentState.g3Score += 25;
+        document.getElementById('g3Score').innerText = currentState.g3Score;
+        fb.className = "text-sm font-bold text-emerald-600";
+        fb.innerText = "⚔️ Seranganmu Kena! Monster menerima damage!";
+
+        if (currentState.g3MonsterHP <= 0) {
+          currentState.g3Level++;
+          document.getElementById('g3Level').innerText = currentState.g3Level;
+          fb.innerText = "🏆 Monster dikalahkan! Level selanjutnya!";
+          currentState.g3MonsterHP = 100;
+        }
+      } else {
+        playSFX('wrong');
+        currentState.g3HeroHP -= 25;
+        fb.className = "text-sm font-bold text-rose-600";
+        fb.innerText = "💥 Ouch! Jawaban salah, kamu diserang monster!";
+        if (currentState.g3HeroHP <= 0) {
+          alert("Pahlawan kehabisan HP! Game direset.");
+          initGame3();
+          return;
+        }
+      }
+
+      updateG3HealthUI();
+      setTimeout(generateG3Question, 1200);
+    }
+
+    function updateG3HealthUI() {
+      document.getElementById('g3HeroHP').style.width = `${Math.max(0, currentState.g3HeroHP)}%`;
+      document.getElementById('g3MonsterHP').style.width = `${Math.max(0, currentState.g3MonsterHP)}%`;
+    }
+
+    /* ==========================================================================
+       6. EVALUASI / KUIS (15 SOAL BANK)
+       ========================================================================== */
+    const quizBank = [
+      {
+        q: "1. Suhu di dalam kulkas $-5^\\circ\\text{C}$, sedangkan suhu di luar ruangan $28^\\circ\\text{C}$. Beda suhu kedua tempat tersebut adalah...",
+        options: ["23°C", "33°C", "-23°C", "38°C"],
+        ans: 1,
+        diff: "Mudah",
+        exp: "Selisih = Suhu Tinggi - Suhu Rendah = $28 - (-5) = 28 + 5 = 33^\\circ\\text{C}$."
+      },
+      {
+        q: "2. Hasil dari urutan bilangan $-8, 4, -3, 0, 2$ jika diurutkan dari yang terkecil adalah...",
+        options: ["-8, -3, 0, 2, 4", "-3, -8, 0, 2, 4", "4, 2, 0, -3, -8", "0, -3, -8, 2, 4"],
+        ans: 0,
+        diff: "Mudah",
+        exp: "Bilangan negatif terkecil adalah yang angkanya paling besar $(-8)$, diikuti $-3, 0, 2, 4$."
+      },
+      {
+        q: "3. Hasil perhitungan dari $-15 + 27$ adalah...",
+        options: ["-12", "12", "-42", "42"],
+        ans: 1,
+        diff: "Mudah",
+        exp: "$-15 + 27 = 27 - 15 = 12$."
+      },
+      {
+        q: "4. Nilai dari $18 - (-12)$ adalah...",
+        options: ["6", "-6", "30", "-30"],
+        ans: 2,
+        diff: "Mudah",
+        exp: "Mengurangi negatif sama dengan menambah positif: $18 - (-12) = 18 + 12 = 30$."
+      },
+      {
+        q: "5. Hasil perkalian dari $(-6) \\times 8$ adalah...",
+        options: ["48", "-48", "14", "-14"],
+        ans: 1,
+        diff: "Mudah",
+        exp: "Negatif dikalikan positif menghasilkan bilangan negatif: $(-6) \\times 8 = -48$."
+      },
+      {
+        q: "6. Hasil dari $(-45) \\div (-9)$ adalah...",
+        options: ["-5", "5", "-6", "6"],
+        ans: 1,
+        diff: "Mudah",
+        exp: "Negatif dibagi negatif menghasilkan bilangan positif: $(-45) \\div (-9) = 5$."
+      },
+      {
+        q: "7. Lawan (invers penjumlahan) dari bilangan $-34$ adalah...",
+        options: ["34", "-34", "1/34", "0"],
+        ans: 0,
+        diff: "Mudah",
+        exp: "Lawan dari $-a$ adalah $+a$. Jadi lawan dari $-34$ adalah $34$."
+      },
+      {
+        q: "8. Hasil dari $(-12) + (-8) - (-15)$ adalah...",
+        options: ["-35", "-5", "5", "11"],
+        ans: 1,
+        diff: "Sedang",
+        exp: "$(-12) + (-8) - (-15) = -20 + 15 = -5$."
+      },
+      {
+        q: "9. Sebuah kapal selam berada pada kedalaman $150\\text{ meter}$ di bawah permukaan laut. Kapal kemudian menyelam lagi sejauh $50\\text{ meter}$. Posisi kapal selam sekarang adalah...",
+        options: ["-100 meter", "-200 meter", "200 meter", "100 meter"],
+        ans: 1,
+        diff: "Sedang",
+        exp: "Kedalaman awal $= -150\\text{ m}$. Menyelam lagi $= -50\\text{ m}$. Posisi akhir $= -150 + (-50) = -200\\text{ meter}$."
+      },
+      {
+        q: "10. Nilai $x$ yang memenuhi persamaan $x + (-7) = -15$ adalah...",
+        options: ["8", "-8", "22", "-22"],
+        ans: 1,
+        diff: "Sedang",
+        exp: "$x = -15 - (-7) = -15 + 7 = -8$."
+      },
+      {
+        q: "11. Pada tes olimpiade matematika: Benar bernilai $+4$, Salah $-2$, dan Tidak Dijawab $0$. Budi menjawab 14 benar, 4 salah, dan 2 tidak dijawab. Skor Budi adalah...",
+        options: ["48", "56", "40", "52"],
+        ans: 0,
+        diff: "Sedang",
+        exp: "Skor $= (14 \\times 4) + (4 \\times -2) + (2 \\times 0) = 56 + (-8) + 0 = 48$."
+      },
+      {
+        q: "12. Suhu mula-mula daging $4^\\circ\\text{C}$ di bawah nol. Setelah dipanaskan suhu naik $25^\\circ\\text{C}$. Kemudian saat dimatikan suhu turun $3^\\circ\\text{C}$ setiap 5 menit selama 15 menit. Suhu akhir daging adalah...",
+        options: ["12°C", "21°C", "15°C", "18°C"],
+        ans: 0,
+        diff: "Sulit",
+        exp: "Suhu awal $= -4^\\circ\\text{C}$. Dipanaskan $= -4 + 25 = 21^\\circ\\text{C}$. Penurunan suhu $= (15 \\div 5) \\times 3 = 9^\\circ\\text{C}$. Suhu akhir $= 21 - 9 = 12^\\circ\\text{C}$."
+      },
+      {
+        q: "13. Hasil dari $[(-18) + 6] \\times [(-12) \\div 3]$ adalah...",
+        options: ["48", "-48", "72", "-72"],
+        ans: 0,
+        diff: "Sulit",
+        exp: "$[(-18) + 6] = -12$. $[(-12) \\div 3] = -4$. Hasil $= (-12) \\times (-4) = 48$."
+      },
+      {
+        q: "14. Seekor katak berada di titik 0. Katak melompat ke kanan 3 kali sejauh 4 satuan, lalu berbalik melompat ke kiri sejauh 15 satuan. Posisi katak sekarang berada di angka...",
+        options: ["-3", "3", "-27", "27"],
+        ans: 0,
+        diff: "Sulit",
+        exp: "Ke kanan $= 3 \\times 4 = +12$. Ke kiri $= -15$. Posisi $= 0 + 12 - 15 = -3$."
+      },
+      {
+        q: "15. Suhu puncak gunung pagi hari $-2^\\circ\\text{C}$. Siang hari naik $8^\\circ\\text{C}$, malam hari turun $11^\\circ\\text{C}$. Suhu puncak gunung pada malam hari adalah...",
+        options: ["-5°C", "5°C", "-17°C", "6°C"],
+        ans: 0,
+        diff: "Sedang",
+        exp: "Suhu $= -2 + 8 - 11 = 6 - 11 = -5^\\circ\\text{C}$."
+      }
+    ];
+
+    function startQuiz() {
+      playSFX('click');
+      currentState.quizAnswers = new Array(15).fill(null);
+      currentState.quizCurrentIndex = 0;
+
+      document.getElementById('quizIntroCard').classList.add('hidden');
+      document.getElementById('quizResultCard').classList.add('hidden');
+      document.getElementById('quizActiveCard').classList.remove('hidden');
+
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const idx = currentState.quizCurrentIndex;
+      const q = quizBank[idx];
+
+      document.getElementById('quizNumberBadge').innerText = `Soal ${idx + 1} dari 15`;
+      document.getElementById('quizLevelBadge').innerText = `Tingkat: ${q.diff}`;
+      document.getElementById('quizQuestionText').innerText = q.q;
+
+      const container = document.getElementById('quizOptionsContainer');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, oIdx) => {
+        const isSelected = currentState.quizAnswers[idx] === oIdx;
+        const btnStyle = isSelected 
+          ? "bg-purple-600 text-white border-purple-600 shadow-md font-bold" 
+          : "bg-white text-slate-800 border-slate-200 hover:bg-purple-50 hover:border-purple-300 font-medium";
+
+        const label = String.fromCharCode(65 + oIdx); // A, B, C, D
+
+        container.innerHTML += `
+          <button onclick="selectQuizAnswer(${oIdx})" class="w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-3 ${btnStyle}">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs flex-shrink-0 ${isSelected ? 'bg-white/20 text-white' : ''}">
+              ${label}
+            </span>
+            <span class="text-sm">${opt}</span>
+          </button>
+        `;
+      });
+
+      document.getElementById('quizPrevBtn').disabled = (idx === 0);
+      const nextBtn = document.getElementById('quizNextBtn');
+      if (idx === quizBank.length - 1) {
+        nextBtn.innerText = "Selesaikan Kuis";
+        nextBtn.className = "px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-heading font-bold text-sm shadow";
+      } else {
+        nextBtn.innerHTML = `Selanjutnya <i class="fas fa-arrow-right ml-1"></i>`;
+        nextBtn.className = "px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-sm shadow";
+      }
+    }
+
+    function selectQuizAnswer(optionIndex) {
+      playSFX('click');
+      currentState.quizAnswers[currentState.quizCurrentIndex] = optionIndex;
+      renderQuizQuestion();
+    }
+
+    function prevQuestion() {
+      if (currentState.quizCurrentIndex > 0) {
+        currentState.quizCurrentIndex--;
+        renderQuizQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentState.quizCurrentIndex < quizBank.length - 1) {
+        currentState.quizCurrentIndex++;
+        renderQuizQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      playSFX('correct');
+      let correctCount = 0;
+      quizBank.forEach((q, i) => {
+        if (currentState.quizAnswers[i] === q.ans) correctCount++;
+      });
+
+      const scorePercent = Math.round((correctCount / quizBank.length) * 100);
+
+      document.getElementById('quizActiveCard').classList.add('hidden');
+      document.getElementById('quizResultCard').classList.remove('hidden');
+
+      document.getElementById('resultScoreText').innerText = `${scorePercent}%`;
+      document.getElementById('resultCorrectCount').innerText = `${correctCount} Soal`;
+      document.getElementById('resultWrongCount').innerText = `${quizBank.length - correctCount} Soal`;
+
+      let category = "Sangat Baik";
+      let msg = "Luar biasa! Pemahamanmu mengenai bilangan bulat sudah sangat sempurna!";
+      if (scorePercent < 80) {
+        category = "Baik";
+        msg = "Bagus sekali! Kamu sudah memahami sebagian besar materi dengan baik.";
+      }
+      if (scorePercent < 60) {
+        category = "Cukup";
+        msg = "Cukup baik. Jangan ragu untuk mempelajari lagi modul materi dan simulasi ya!";
+      }
+      if (scorePercent < 40) {
+        category = "Perlu Bimbingan";
+        msg = "Tetap semangat! Pelajari kembali modul materi dan ulangi simulasi untuk hasil yang lebih maksimal.";
+      }
+
+      document.getElementById('resultCategoryBadge').innerText = category;
+      document.getElementById('resultMotivationalMessage').innerText = msg;
+
+      // Render Pembahasan
+      const list = document.getElementById('quizPembahasanList');
+      list.innerHTML = '';
+      quizBank.forEach((q, i) => {
+        const userAns = currentState.quizAnswers[i];
+        const isCorrect = (userAns === q.ans);
+        const userLabel = userAns !== null ? String.fromCharCode(65 + userAns) : "Tidak dijawab";
+        const correctLabel = String.fromCharCode(65 + q.ans);
+
+        list.innerHTML += `
+          <div class="p-3 rounded-xl border ${isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}">
+            <div class="flex items-center justify-between font-bold mb-1">
+              <span>Soal #${i+1} (${q.diff})</span>
+              <span class="${isCorrect ? 'text-emerald-700' : 'text-rose-700'}">
+                ${isCorrect ? '✓ Benar' : '✗ Salah'}
+              </span>
+            </div>
+            <p class="text-slate-700 mb-1">${q.q}</p>
+            <p class="text-slate-500">Jawabanmu: <strong>${userLabel}</strong> | Kunci: <strong>${correctLabel}</strong></p>
+            <p class="text-slate-600 mt-1 italic">💡 <strong>Pembahasan:</strong> ${q.exp}</p>
+          </div>
+        `;
+      });
+    }
+
+    /* ==========================================================================
+       7. APP INITIALIZATION
+       ========================================================================== */
+    window.onload = function() {
+      navigateTo('home');
+    };
+  </script>
+</body>
+</html>
